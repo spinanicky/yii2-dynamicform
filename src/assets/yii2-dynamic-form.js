@@ -87,9 +87,16 @@
 
         // remove "error/success" css class
         var yiiActiveFormData = $('#' + widgetOptions.formId).yiiActiveForm('data');
-        $template.find('.' + yiiActiveFormData.settings.errorCssClass).removeClass(yiiActiveFormData.settings.errorCssClass);
-        $template.find('.' + yiiActiveFormData.settings.successCssClass).removeClass(yiiActiveFormData.settings.successCssClass);
-
+        var $errorCssClass = "has-error"; var $successCssClass = "has-success"; // init default yii class
+        
+        // seek settings data only if object is not undefined.
+        if ( typeof yiiActiveFormData != 'undefined') {
+            $errorCssClass = yiiActiveFormData.settings.errorCssClass;
+            $successCssClass = yiiActiveFormData.settings.successCssClass;
+        }
+        $template.find('.' + $errorCssClass).removeClass($errorCssClass);
+        $template.find('.' + $successCssClass).removeClass($successCssClass);
+        
         return $template;
     };
 
@@ -455,12 +462,12 @@
                     _restoreKrajeeDepdrop($(this));
                 }
 
-                $.when($('#' + id).select2(configSelect2)).done(initSelect2Loading(id, '.select2-container--krajee'));
+                $.when($('#' + id).select2(configSelect2)).done(initS2Loading(id, '.select2-container--krajee'));
 
                 var kvClose = 'kv_close_' + id.replace(/\-/g, '_');
 
                 $('#' + id).on('select2:opening', function(ev) {
-                    initSelect2DropStyle(id, kvClose, ev);
+                    initS2ToggleAll(id, kvClose, ev);
                 });
 
                 $('#' + id).on('select2:unselect', function() {
